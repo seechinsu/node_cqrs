@@ -1,0 +1,65 @@
+version: '3.3'
+services:
+  neo4j:
+    image: neo4j
+    container_name: neo4j
+    volumes:
+      - ./neo4j/data:$HOME/neo4j/data
+      - ./neo4j/logs:$HOME/neo4j/logs
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    networks:
+      - core
+  mongo:
+    image: mongo
+    container_name: mongodb
+    volumes:
+      - ./data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - core
+  solr:
+    container_name: solr
+    image: solr:7.1.0
+    ports:
+     - "8981:8983"
+     - "8984:8984"
+    volumes:
+     - ./solrconfigsets:/opt/solr/server/solr/configs
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr
+      - start
+      - -f
+      - -c
+      - -z
+      - zoo:2181
+      - -a
+      - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
+    networks:
+      - core
+  zoo:
+    image: zookeeper
+    container_name: zoo
+    restart: always
+    hostname: zoo
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zoo:2888:3888
+    networks:
+      - core
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - core
+
+networks:
+  core:

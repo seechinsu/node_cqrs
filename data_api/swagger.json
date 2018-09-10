@@ -1,0 +1,281 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Yet Another Node.js Blogg Application API",
+    "description": "Yet Another Node.js Blogg Application API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3050",
+  "tags": [
+    {
+      "name": "greeting",
+      "description": "A test greeting to the endpoint to get a response"
+    },
+    {
+      "name": "Report",
+      "description": "A CRUD endpoint for the Report Entity"
+    }
+  ],
+  "schemes": [
+    "http", "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/report/greeting": {
+      "get": {
+        "tags": [
+          "greeting"
+        ],
+        "summary": "Get a greeting",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/greeting"
+            }
+          }
+        }
+      }
+    },
+    "/api/reports": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Get a list of Reports",
+        "parameters": [{
+            "name": "offset",
+            "in": "query",
+            "description": "number of items to skip",
+            "schema": {
+              "type": "integer"
+            }
+          },
+            {
+            "name": "limit",
+            "in": "query",
+            "description": "max records to return",
+            "schema" : {
+              "type": "integer"
+            }
+          },
+            {
+            "name": "sortProperty",
+            "in": "query",
+            "description": "field to sort by",
+            "schema" : {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Reports"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Create a Report",
+        "parameters": [
+          {
+            "name": "Report",
+            "in": "body",
+            "description": "Report that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/doc/{ObjectId}": {
+      "parameters": [
+        {
+          "name": "ObjectId",
+          "in": "path",
+          "required": true,
+          "description": "Mongo ObjectID of Report Doc",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Retrieve a Report Doc by Mongo ObjectID",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Edit a Report Doc by Mongo ObjectID",
+        "parameters": [
+          {
+            "name": "Report",
+            "in": "body",
+            "description": "Edits to make to the Report Doc by Mongo ObjectID",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Delete a Report Doc by Mongo ObjectID",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/{ReportId}": {
+      "parameters": [
+        {
+          "name": "ReportId",
+          "in": "path",
+          "required": true,
+          "description": "ID of Report",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Retrieve a Report by Id",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Edit a Report",
+        "parameters": [
+          {
+            "name": "Report",
+            "in": "body",
+            "description": "Edits to make to the Report",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Delete a Report",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "greeting": {
+      "properties": {
+        "hi": {
+          "type": "string"
+        }
+      }
+    },
+    "Report": {
+      "properties": {
+        "_id": { "type": "string" },
+        "report_id": { "type": "number" },
+        "report_type": { "type": "string" },
+        "reporter_email": { "type": "string" },
+        "is_active": { "type": "boolean" }
+      }
+    },
+    "Reports": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Report" }
+    }
+  }
+}
