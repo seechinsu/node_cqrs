@@ -47,8 +47,8 @@ module.exports =  {
   create(req, res, next) {
     // Parse request body
 
-    req.body.reporter.entity_type = 'person';
-    req.body.reporter.entity_subtype = 'reporter';
+    // req.body.reporter.entity_type = 'person';
+    // req.body.reporter.entity_subtype = 'reporter';
     const reportProps = req.body;
     //const reporter = req.body.reporter;
     //console.log(reporter);
@@ -56,15 +56,18 @@ module.exports =  {
     // Create new document instance
     const report = new Report(reportProps);
 
-    //console.log(report);
+    const msg = JSON.stringify(report);
+    console.log(report);
+    let list = [1,2,3]
+    console.log(list.forEach((value) => {value*2}));
+
     // First save the new report based on the request body
     report.save()
       .then((savedReport) => {
         res.status(201).send(savedReport);
-        // Send message with entire object to rabbitmq
-        const q = 'create_task';
+        // Send message with entire object to rabbitmq exchange
         const msg = JSON.stringify(savedReport);
-        Producer.broadCast(q,msg);
+        Producer.broadCast(msg);
       })
       .catch(next);
   },
@@ -83,7 +86,7 @@ module.exports =  {
           // Send message with entire object to rabbitmq after oject is updated
           const q = 'update_task';
           const msg = JSON.stringify(editedReport);
-          Producer.broadCast(q,msg);
+          Producer.broadCast(msg);
         })
         .catch(next);
   },
@@ -102,7 +105,7 @@ module.exports =  {
           // Send message with entire object to rabbitmq after oject is updated
           const q = 'update_task';
           const msg = JSON.stringify(editedReport);
-          Producer.broadCast(q,msg);
+          Producer.broadCast(msg);
         })
         .catch(next);
   },
@@ -119,7 +122,7 @@ module.exports =  {
           // Send message to rabbitmq with only the id of the object
           const q = 'delete_task';
           const msg = JSON.stringify(deletedReport);
-          Producer.broadCast(q,msg);
+          Producer.broadCast(msg);
         })
         .catch(next);
   },
@@ -137,7 +140,7 @@ module.exports =  {
           // Send message to rabbitmq with only the id of the object
           const q = 'delete_task';
           const msg = JSON.stringify(deletedReport);
-          Producer.broadCast(q,msg);
+          Producer.broadCast(msg);
         })
         .catch(next);
   }

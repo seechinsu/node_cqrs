@@ -21,7 +21,7 @@
     "mocha": "^5.2.0",
     "mongoose": "^5.2.4",
     "mongoose-auto-increment": "^5.0.1",
-    "nodemon": "^1.18.3",
+    "nodemon": "^1.18.3",s
     "supertest": "^3.1.0",
     "swagger-ui-express": "^3.0.10",
     "webpack": "^4.17.1",

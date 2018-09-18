@@ -264,13 +264,22 @@
         }
       }
     },
+    "ReportedEntities": {
+      "properties": {
+        "entity_id": { "type": "number" },
+        "entity_type": { "type": "string" },
+        "entity_subtype": { "type": "string" },
+        "first_name": { "type": "string" }
+      }
+    },
     "Report": {
       "properties": {
         "_id": { "type": "string" },
         "report_id": { "type": "number" },
         "report_type": { "type": "string" },
         "reporter_email": { "type": "string" },
-        "is_active": { "type": "boolean" }
+        "is_active": { "type": "boolean" },
+        "entities": { "type": "array", "items": { "$ref": "#/definitions/ReportedEntities" }}
       }
     },
     "Reports": {

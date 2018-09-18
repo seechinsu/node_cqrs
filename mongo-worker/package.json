@@ -1,0 +1,16 @@
+{
+  "name": "mongo-worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "mongoose": "^5.2.15",
+    "mongoose-auto-increment": "^5.0.1"
+  }
+}
