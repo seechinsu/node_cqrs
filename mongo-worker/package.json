@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.2",
-    "mongoose": "^5.2.15",
-    "mongoose-auto-increment": "^5.0.1"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "mongoose": "^5.2.15"
   }
 }

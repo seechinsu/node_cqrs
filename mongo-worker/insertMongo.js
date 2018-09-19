@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const autoIncrement = require('mongoose-auto-increment')
 const amqp = require('amqplib/callback_api');
 
 mongoose.connect('mongodb://localhost:27017/node_cqrs', { useNewUrlParser: true });
 
-connection = mongoose.createConnection('mongodb://localhost:27017/node_cqrs', { useNewUrlParser: true });
-autoIncrement.initialize(connection);
+// connection = mongoose.createConnection('mongodb://localhost:27017/node_cqrs', { useNewUrlParser: true });
+// autoIncrement.initialize(connection);
 
 const ReportedEntitySchema = new Schema({
-  report_id: { type: Number },
+  report_id: Schema.Types.ObjectId,
   report_type: { type: String },
   reporter_email: { type: String },
   is_active: { type: Boolean },
@@ -18,7 +17,7 @@ const ReportedEntitySchema = new Schema({
   entity_subtype: { type: String }
 });
 
-ReportedEntitySchema.plugin(autoIncrement.plugin, { model: 'reported_entities', field: 'entity_id' });
+// ReportedEntitySchema.plugin(autoIncrement.plugin, { model: 'reported_entities', field: 'entity_id' });
 const Entity = mongoose.model('reported_entities', ReportedEntitySchema);
 
 amqp.connect('amqp://user:bitnami@localhost:5672', function(err,conn) {
@@ -35,7 +34,11 @@ amqp.connect('amqp://user:bitnami@localhost:5672', function(err,conn) {
     ch.consume(q, function(msg) {
       const message = msg.content;
       console.log(`Received message: ${message}`);
-      const payload = JSON.parse(message)
+      let payload = JSON.parse(message)
+
+      payload.report_id = payload._id;
+
+      delete payload._id;
 
       const entities = payload.entities;
 
@@ -43,27 +46,26 @@ amqp.connect('amqp://user:bitnami@localhost:5672', function(err,conn) {
 
       const reportData = payload;
 
-      let list = [1,2,3]
-
-      console.log(list.forEach((value) => {value*2}));
-
-      console.log("-----------------------");
-      console.log(entities);
-      console.log(reportData);
-      console.log("-----------------------");
-      console.log(list.forEach((obj) => { obj *2 }));
-      console.log(entities.forEach((obj) => {Object.assign(obj,reportData)}));
+      // console.log("-----------------------");
+      // console.log(entities);
+      // console.log(reportData);
+      // console.log("-----------------------");
+      const list_payload = entities.map(function (obj) {
+        return Object.assign(obj,reportData);
+      })
+      console.log(list_payload);
       console.log("-----------------------");
 
       // Parse message to json and insert into mongodb
-      const report = new Entity(payload);
+      // const reports = new Entity(payload);
       // console.log(report);
-      report.save()
-        .then((savedReport) => {
-            console.log(savedReport);
-          }, (err) => {
-            console.log(error);
-          })
+      Entity.insertMany(list_payload)
+        .then((savedReports) => {
+          console.log(savedReports);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
       // Requires acknowledgement from rabbit
       ch.ack(msg);
