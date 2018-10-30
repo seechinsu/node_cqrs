@@ -16,7 +16,10 @@ amqp.connect('amqp://user:bitnami@localhost:5672', function(err,conn) {
 
     //assign queue to listen to
     const q = 'update_task';
+    const ex = 'ciera_crud';
+    ch.assertExchange(ex, 'fanout', {durable: true});
     ch.assertQueue(q, {durable: true});
+    ch.bindQueue(q, ex, '');
     ch.prefetch(1);
     console.log("Listening for messages...");
 

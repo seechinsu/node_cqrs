@@ -56,10 +56,8 @@ module.exports =  {
     // Create new document instance
     const report = new Report(reportProps);
 
-    const msg = JSON.stringify(report);
-    console.log(report);
-    let list = [1,2,3]
-    console.log(list.forEach((value) => {value*2}));
+    // const msg = JSON.stringify(report);
+    // console.log(report);
 
     // First save the new report based on the request body
     report.save()
